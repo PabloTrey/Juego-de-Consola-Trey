@@ -51,3 +51,42 @@ int main()
 }
 
 
+// Implementaciones b├ísicas para mostrar estructura
+
+int seleccionDeCarta()
+
+void jugar()
+{
+    cout << "\n--- Iniciando juego... ---\n";
+    // Aqu├¡ ir├í el desarrollo del juego
+}
+
+void mostrarEstadisticas()
+{
+    cout << "\n--- Estadisticas del juego ---\n";
+    // Mostrar info del ├║ltimo juego (se puede agregar vector para ranking)
+}
+
+void mostrarCreditos()
+{
+    cout << "\n--- Cr├⌐ditos ---\n";
+    cout << "Integrantes del equipo:\n";
+    cout << "- Apellido, Nombre - Legajo\n";
+    cout << "- Nombre del equipo\n";
+}
+
+bool confirmarSalida()
+{
+    char respuesta;
+    do
+    {
+        cout << "┬┐Seguro que desea salir? (S/N): ";
+        cin >> respuesta;
+        respuesta = toupper(respuesta);
+    }
+    while (respuesta != 'S' && respuesta != 'N');
+
+    return (respuesta == 'S');
+}
+
+
