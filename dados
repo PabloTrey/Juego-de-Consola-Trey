@@ -1,0 +1,29 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+
+using namespace std;
+
+int main()
+{
+    int d1, d2;
+    int i;
+    system ("cls");
+
+    srand(time(NULL));
+    cout << "Los dos numeros deben ser iguales" <<endl;
+    cout << "#Tirada d1 d2"<<endl;
+
+    i=1;
+    while(5==5) //FUNCION REPETITIVA
+    {
+        d1 = 1 + rand() %6;  //GENERA NRO ALEATORIOS DEL 1 A 6
+        d2 = 1 + rand() %6;  //GENERA NRO ALEATORIOS DEL 1 A 6
+
+        if (d1 == d2)
+
+    }
+
+
+    return 0;
+}
