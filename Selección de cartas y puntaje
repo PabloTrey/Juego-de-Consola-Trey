@@ -1,0 +1,54 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+int main()
+{
+    //Robar carta del 50 al 65
+    const int TAM = 16;
+    int vNum[TAM];
+    int acumuladorJug;
+
+    // Inicializar la semilla con el tiempo actual
+    srand(static_cast<unsigned int>(time(NULL)));
+
+    // Llenar el vector con números aleatorios del 50 al 65 incluidos
+    for (int i = 0; i < TAM; i++)
+    {
+        vNum[i] = rand() % (65-50 + 1)+50;
+    }
+    // Mostrar el contenido del vector
+    cout << "Tu carta robada es: ";
+    for (int i = 0; i < 1; i++)
+    {
+        cout << vNum[i] << " "<<endl;
+
+        //Vector para puntos
+        int vNum[i];
+        {
+            if (vNum[i]<=55)
+            {
+                acumuladorJug +=7;
+                cout<< 7<<" ptos"<<endl;
+            }
+            else
+            {
+                if (vNum[i]<=60)
+                {
+                    acumuladorJug +=8;
+                    cout<< 8<<" ptos"<<endl;
+                }
+                else
+                {
+                    if (vNum[i]<=65)
+                    {
+                        acumuladorJug +=9;
+                        cout<<9<<" ptos"<<endl;
+                    }
+                }
+            }
+        }
+    }
+    cout<< "Total de puntos: "<<acumuladorJug<<endl;
+    return 0;
+}
