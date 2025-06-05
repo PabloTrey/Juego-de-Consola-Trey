@@ -14,6 +14,7 @@ int main()
     int opcion;
     bool salir = false;
 
+    system("cls");
     while (!salir)
     {
         // Mostrar menu
@@ -44,21 +45,26 @@ int main()
         default:
             cout << "Opcion invalida. Intente nuevamente.\n"<<endl;
         }
-        system("cls");
     }
 
     return 0;
 }
 
 
-// Implementaciones b├ísicas para mostrar estructura
 
-int seleccionDeCarta()
+
+
+
+
+
+
+
+// Implementaciones b├ísicas para mostrar estructura
 
 void jugar()
 {
-    cout << "\n--- Iniciando juego... ---\n";
-    // Aqu├¡ ir├í el desarrollo del juego
+    cout << "Jugador 1 elija una carta para empezar: ";
+
 }
 
 void mostrarEstadisticas()
@@ -88,5 +94,4 @@ bool confirmarSalida()
 
     return (respuesta == 'S');
 }
-
 
