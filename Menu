@@ -3,11 +3,13 @@
 #include <ctime>
 using namespace std;
 
-// Prototipos de funciones
+// DECLARACION DE FUNCIONES
 void jugar();
+int lanzarDosDados();
 void mostrarEstadisticas();
 void mostrarCreditos();
 bool confirmarSalida();
+string nombreJug1, nombreJug2;
 
 int main()
 {
@@ -27,6 +29,7 @@ int main()
         cout << "0 - SALIR" << endl;
         cout << "Seleccione una opcion: ";
         cin >> opcion;
+        system("cls");
 
         switch (opcion)
         {
@@ -51,69 +54,34 @@ int main()
 }
 
 
-// Implementaciones b├ísicas para mostrar estructura
+// FUNCIONES QUE VAMOS A UTILIZAR
 
-void mostrarPantallaRegistro()
-    {
-    limpiarPantalla();
-    cout << "TREY" << endl;
-    cout << "--------------------------------------------------------" << endl;
-    cout << "Antes de comenzar deben registrar sus nombres:" << endl;
-    }
 
-    void registrarJugadores(string nombres[]) {
-    mostrarPantallaRegistro();
-    // Solicitar nombres de los jugadores
-        for(int i = 0; i < MAX_JUGADORES; i++) {
-        cout << "¿Nombre? ";
-        getline(cin, nombres[i]);
-
-        // Validar que el nombre no esté vacío
-        while(nombres[i].empty()) {
-            cout << "El nombre no puede estar vacio. Ingrese nuevamente: ";
-            getline(cin, nombres[i]);
-        }
-    }
-    }
 void jugar()
 {
     cout << "Antes de comenzar deben registrar sus nombres:" << endl;
-    cout << "Jugador 1: ";
-    cin << 
-    void registrarJugadores(string nombres[]) {
-    mostrarPantallaRegistro();
-    // Solicitar nombres de los jugadores
-        for(int i = 0; i < MAX_JUGADORES; i++) {
-        cout << "¿Nombre? ";
-        getline(cin, nombres[i]);
+    cout << "Jugador 1: "<<endl;
+    cin  >> nombreJug1;
+    cout << "Jugador 2: "<<endl;
+    cin >> nombreJug2;
 
-        // Validar que el nombre no esté vacío
-        while(nombres[i].empty()) {
-            cout << "El nombre no puede estar vacio. Ingrese nuevamente: ";
-            getline(cin, nombres[i]);
-        }
-    }
-    }
-
-
-    //Robar carta del 50 al 65
-    const int TAM = 16;
+    const int TAM = 16;           //Robar carta del 50 al 65
     int vNum[TAM];
-    int acumuladorJug;
+    int VDado[2];
+    int acumuladorJug1 = 0, acumuladorJug2 = 0;
 
     cout << "Jugador 1 elija una carta para empezar: ";
     system("pause");
 
-    // Inicializar la semilla con el tiempo actual
-    srand(static_cast<unsigned int>(time(NULL)));
+    srand(static_cast<unsigned int>(time(NULL)));   // Inicializar la semilla con el tiempo actual
 
-    // Llenar el vector con números aleatorios del 50 al 65 incluidos
-    for (int i = 0; i < TAM; i++)
+
+    for (int i = 0; i < TAM; i++)     // Llenar el vector con números aleatorios del 50 al 65 incluidos
     {
         vNum[i] = rand() % (65-50 + 1)+50;
     }
-    // Mostrar el contenido del vector
-    cout << "Tu carta robada es: ";
+
+    cout << "Tu carta robada es: ";     // Mostrar el contenido del vector
     for (int i = 0; i < 1; i++)
     {
         cout << vNum[i] << " "<<endl;
@@ -123,48 +91,103 @@ void jugar()
         {
             if (vNum[i]<=55)
             {
-                acumuladorJug +=7;
-                cout<< 7<<" ptos"<<endl;
+                acumuladorJug1 +=7;
+                cout<<"Puntos de Tiempo: "<< 7<<endl;
             }
             else
             {
                 if (vNum[i]<=60)
                 {
-                    acumuladorJug +=8;
-                    cout<< 8<<" ptos"<<endl;
+                    acumuladorJug1 +=8;
+                    cout<<"Puntos de Tiempo: "<< 8<<endl;
                 }
                 else
                 {
                     if (vNum[i]<=65)
                     {
-                        acumuladorJug +=9;
-                        cout<<9<<" ptos"<<endl;
+                        acumuladorJug1 +=9;
+                        cout<<"Puntos de Tiempo: "<< 9<<endl;
                     }
                 }
             }
         }
     }
-    cout<< "Total de puntos: "<<acumuladorJug<<endl;
+    cout<< "Total de puntos: "<<acumuladorJug1<<endl;
 
+    cout << "Jugador 2 elija una carta para empezar: ";
+    system("pause");
+
+    srand(static_cast<unsigned int>(time(NULL)));   // Inicializar la semilla con el tiempo actual
+
+
+    for (int i = 0; i < TAM; i++)     // Llenar el vector con números aleatorios del 50 al 65 incluidos
+    {
+        vNum[i] = rand() % (65-50 + 1)+50;
+    }
+
+    cout << "Tu carta robada es: ";     // Mostrar el contenido del vector
+    for (int i = 0; i < 1; i++)
+    {
+        cout << vNum[i] << " "<<endl;
+
+        //Vector para puntos
+        int vNum[i];
+        {
+            if (vNum[i]<=55)
+            {
+                acumuladorJug2 +=7;
+                cout<<"Puntos de Tiempo: "<< 7<<endl;
+            }
+            else
+            {
+                if (vNum[i]<=60)
+                {
+                    acumuladorJug2 +=8;
+                    cout<<"Puntos de Tiempo: "<< 8<<endl;
+                }
+                else
+                {
+                    if (vNum[i]<=65)
+                    {
+                        acumuladorJug2 +=9;
+                        cout<<"Puntos de Tiempo: "<< 9<<endl;
+                    }
+                }
+            }
+        }
+    }
+    cout<< "Total de puntos: "<<acumuladorJug2<<endl;
+
+
+    cout << "Jugador 1, con cuantos dados desea jugar: ";
+    lanzarDosDados();
+
+}
+
+
+
+
+int lanzarDosDados()
+{
+    int vDado[2];
+    for (int i = 0; i < 2; i++)    // EN DESARROLLO
+    {
+        vDado[2] = rand() % (65-50 + 1)+50;
+    }
 }
 
 void mostrarEstadisticas()
 {
-    cout << "\n--- Estadisticas del juego ---\n";
-    // Mostrar info del ├║ltimo juego (se puede agregar vector para ranking)
+
 }
 
 void mostrarCreditos()
 {
-    cout << "\n--- Cr├⌐ditos ---\n";
-    cout << "Integrantes del equipo:\n";
-    cout << "- Apellido, Nombre - Legajo\n";
-    cout << "- Nombre del equipo\n";
+    cout << "------------INTREGRANTES-------------"<<endl;
+    cout << "Ponce Alejandro - Legajo nro: 32583"<<endl;
+    cout << "Troncoso Gabriela - Legano nro: 32662"<<endl;
+    cout << "Robledo Pablo - Legajo nro: 27909"<<endl;
 }
-
-
-
-
 
 
 bool confirmarSalida()
@@ -172,7 +195,7 @@ bool confirmarSalida()
     char respuesta;
     do
     {
-        cout << "┬┐Seguro que desea salir? (S/N): ";
+        cout << "Seguro que desea salir? (S/N): ";
         cin >> respuesta;
         respuesta = toupper(respuesta);
     }
@@ -180,4 +203,3 @@ bool confirmarSalida()
 
     return (respuesta == 'S');
 }
-
