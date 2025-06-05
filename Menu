@@ -1,0 +1,53 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+// Prototipos de funciones
+void jugar();
+void mostrarEstadisticas();
+void mostrarCreditos();
+bool confirmarSalida();
+
+int main()
+{
+    int opcion;
+    bool salir = false;
+
+    while (!salir)
+    {
+        // Mostrar menu
+        cout << "=======================" << endl;
+        cout << "        TREY           " << endl;
+        cout << "=======================" << endl;
+        cout << "1 - JUGAR" << endl;
+        cout << "2 - ESTADISTICAS" << endl;
+        cout << "3 - CREDITOS" << endl;
+        cout << "0 - SALIR" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+
+        switch (opcion)
+        {
+        case 1:
+            jugar();
+            break;
+        case 2:
+            mostrarEstadisticas();
+            break;
+        case 3:
+            mostrarCreditos();
+            break;
+        case 0:
+            salir = confirmarSalida();
+            break;
+        default:
+            cout << "Opcion invalida. Intente nuevamente.\n"<<endl;
+        }
+        system("cls");
+    }
+
+    return 0;
+}
+
+
