@@ -1,0 +1,187 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+// DECLARACION DE FUNCIONES
+void jugar();
+int lanzarDosDados();
+void mostrarEstadisticas();
+void mostrarCreditos();
+bool confirmarSalida();
+int lanzarDosDados();
+int robarCarta();
+
+int main()
+{
+    string nombreJug1, nombreJug2;
+    int opcion;
+    bool salir = false;
+
+    system("cls");
+    while (!salir)
+    {
+        // Mostrar menu
+        cout << "=======================" << endl;
+        cout << "        TREY           " << endl;
+        cout << "=======================" << endl;
+        cout << "1 - JUGAR" << endl;
+        cout << "2 - ESTADISTICAS" << endl;
+        cout << "3 - CREDITOS" << endl;
+        cout << "0 - SALIR" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        system("cls");
+
+        switch (opcion)
+        {
+        case 1:
+            jugar();
+            break;
+        case 2:
+            mostrarEstadisticas();
+            break;
+        case 3:
+            lanzarDosDados();
+            //mostrarCreditos();
+            break;
+        case 0:
+            salir = confirmarSalida();
+            break;
+        default:
+            cout << "Opcion invalida. Intente nuevamente.\n"<<endl;
+        }
+    }
+
+    return 0;
+}
+
+// FUNCIONES QUE VAMOS A UTILIZAR
+void jugar()
+{
+    string nombreJug1, nombreJug2;
+    cout << "Antes de comenzar deben registrar sus nombres:" << endl;
+    cout << "Jugador 1: "<<endl;
+    cin  >> nombreJug1;
+    cout << "Jugador 2: "<<endl;
+    cin >> nombreJug2;
+
+    cout << "Jugador 1 elija una carta para empezar: ";
+    system("pause");
+
+    robarCarta();
+
+    cout << "Jugador 2 elija una carta para empezar: ";
+    system("pause");
+
+    robarCarta();
+
+    srand(static_cast<unsigned int>(time(NULL)));   // Inicializar la semilla con el tiempo actual
+
+
+
+    cout << "Jugador 1, con cuantos dados desea jugar: ";
+    lanzarDosDados();
+
+}
+
+
+
+
+
+
+void mostrarEstadisticas()
+{
+
+}
+
+void mostrarCreditos()
+{
+    cout << "------------INTREGRANTES-------------"<<endl;
+    cout << "Ponce Alejandro - Legajo nro: 32583"<<endl;
+    cout << "Troncoso Gabriela - Legano nro: 32662"<<endl;
+    cout << "Robledo Pablo - Legajo nro: 27909"<<endl;
+}
+
+
+bool confirmarSalida()
+{
+    char respuesta;
+    do
+    {
+        cout << "Seguro que desea salir? (S/N): ";
+        cin >> respuesta;
+        respuesta = toupper(respuesta);
+    }
+    while (respuesta != 'S' && respuesta != 'N');
+
+    return (respuesta == 'S');
+}
+
+
+
+int robarCarta()
+{
+
+    const int TAM = 16;           //Robar carta del 50 al 65
+    int vNum[TAM];
+    int VDado[2];
+    int acumuladorJug1 = 0, acumuladorJug2 = 0;
+ srand(static_cast<unsigned int>(time(NULL)));   // Inicializar la semilla con el tiempo actual
+
+
+    for (int i = 0; i < TAM; i++)     // Llenar el vector con números aleatorios del 50 al 65 incluidos
+    {
+        vNum[i] = rand() % (65-50 + 1)+50;
+    }
+
+    cout << "Tu carta robada es: ";     // Mostrar el contenido del vector
+    for (int i = 0; i < 1; i++)
+    {
+        cout << vNum[i] << " "<<endl;
+
+        //Vector para puntos
+
+        {
+            if (vNum[i]<=55)
+            {
+                acumuladorJug1 +=7;
+                cout<<"Puntos de Tiempo: "<< 7<<endl;
+            }
+            else
+            {
+                if (vNum[i]<=60)
+                {
+                    acumuladorJug1 +=8;
+                    cout<<"Puntos de Tiempo: "<< 8<<endl;
+                }
+                else
+                {
+                    if (vNum[i]<=65)
+                    {
+                        acumuladorJug1 +=9;
+                        cout<<"Puntos de Tiempo: "<< 9<<endl;
+                    }
+                }
+            }
+        }
+    }
+    cout<< "Total de puntos: "<<acumuladorJug1<<endl;
+}
+
+int lanzarDosDados()
+{
+    srand(static_cast<unsigned int>(time(NULL))); // Inicializar la semilla
+    int vDado[1];
+    int suma = 0;
+
+    for (int i = 0; i < 2; i++)
+    {
+        vDado[i] = rand() % 6 + 1; // Dado de 1 a 6
+        cout << "Dado " << (i + 1) << ": " << vDado[i] << endl;
+        suma += vDado[i];
+    }
+
+    cout << "Suma total: " << suma << endl;
+    return suma;
+}
