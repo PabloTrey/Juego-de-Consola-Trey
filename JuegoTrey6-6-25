@@ -243,5 +243,5 @@ int hayBugs(vDado, tamanio)
 
     return bugs;
 }
-
+Probando contribucion Alejandro Ponce
 */
