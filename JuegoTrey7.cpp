@@ -31,13 +31,13 @@ int main()
     while (!salir)
     {
         limpiarPantalla();
-        cout << "=======================\n";
-        cout << "        TREY           \n";
-        cout << "=======================\n";
-        cout << "1 - JUGAR\n";
-        cout << "2 - ESTADISTICAS\n";
-        cout << "3 - CREDITOS\n";
-        cout << "0 - SALIR\n";
+        cout << "=======================" << endl;
+        cout << "        TREY           " << endl;
+        cout << "=======================" << endl;
+        cout << "1 - JUGAR" << endl;
+        cout << "2 - ESTADISTICAS" << endl;
+        cout << "3 - CREDITOS" << endl;
+        cout << "0 - SALIR" << endl;
         cout << "Seleccione una opcion: ";
         cin >> opcion;
 
@@ -56,7 +56,7 @@ int main()
             salir = confirmarSalida(); // Preguntar si quiere salir
             break;
         default:
-            cout << "Opcion invalida. Intente nuevamente.\n";
+            cout << "Opcion invalida. Intente nuevamente." << endl;
             pausarPantalla();
         }
     }
@@ -79,7 +79,7 @@ void jugar()
     cout << "Antes de comenzar deben registrar sus nombres:" << endl;
     cout << "Jugador 1: ";
     cin >> nombreJug[0];
-    cout << "\nJugador 2: ";
+    cout << endl << "Jugador 2: ";
     cin >> nombreJug[1];
     limpiarPantalla();
 
@@ -89,7 +89,7 @@ void jugar()
         cout << nombreJug[i] << " elejí una carta para empezar: " << endl;
         pausarPantalla();
         objetivo[i] = robarCarta(pt[i]);
-        cout << "Recibe " << pt[i] << " PT\n" << endl << endl;
+        cout << "Recibe " << pt[i] << " PT" << endl << endl;
     }
 
     pausarPantalla();
@@ -241,7 +241,7 @@ void analizarJugada(int vDado[], int tam, int &pt, int &bugs, int &puntosRonda)
         else if (cantBugs == 2) { bugs += 2; pt -= 1; }
         else if (cantBugs == 3) { bugs += 3; pt -= 2; }
 
-        cout << "¡Apareció al menos un BUG! Fin de la ronda.\n";
+        cout << "Aparecio al menos un BUG! Fin de la ronda." << endl;
     }
     else
     {
@@ -270,7 +270,7 @@ void analizarJugada(int vDado[], int tam, int &pt, int &bugs, int &puntosRonda)
 // Muestra mensaje de estadísticas
 void mostrarEstadisticas()
 {
-    cout << "Estadísticas aún no implementadas." << endl;
+    cout << "Estadisticas aun no implementadas." << endl;
     pausarPantalla();
 }
 
