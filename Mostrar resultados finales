@@ -1,0 +1,14 @@
+void mostrarResultadoFinales (string nombreJug[2], int puntosTotales[2],int pt[2], int bugs [2], bool finalizado[2])
+{
+   limpiarPantalla();
+   cout<< "------------------RESULTADOS FINALES-------------------"<<endl;
+   for (int i=0; i<2; i++)
+   {
+       cout<<"Jugador: "<<nombreJug[i]<<endl;
+       cout<<"Puntaje Total: "<<puntosTotales[i]<<endl;
+       cout<<"Puntos de Tiempo restantes: "<<pt[i]<<endl;
+       cout<<"Cantidad de BUGS: "<<bugs[i]<<endl;
+       cout<<"Estado: "<<(finalizado[i]?"Finalizado": "Abandono")<<endl;
+       cout<<"----------------------------------------------------"<<endl;
+   }
+}
