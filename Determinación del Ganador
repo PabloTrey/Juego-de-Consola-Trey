@@ -1,0 +1,15 @@
+int ganador = -1;
+if(finalizado[0]&&!finalizado[1]) ganador=0;
+else if(!finalizado[0]&&finalizado[1]) ganador=1;
+else if(finalizado[0]&& finalizado[1]){
+    if (puntosTotales[0]>puntosTotales[1]) ganador=0;
+    else if (puntosTotales[1]>puntosTotales[0]) ganador=1;
+    else ganador=-1;//empate
+}
+if(ganador!=1)
+    cout<<" 🎉 ¡FELICITACIONES EL GANADOR ES:"<< nombreJug[ganador]<<"! 🎉"<<endl;
+else
+    cout<<"La partida termino en empate"<<endl;
+cout<<"----------------------------------------------"<<endl;
+pausarPantalla();
+}
