@@ -88,7 +88,6 @@ void jugar()
     getline(cin,nombreJug[1]);
     limpiarPantalla();
 
-
     // Robar carta y definir objetivo inicial
     for (int i = 0; i < 2; i++)
     {
@@ -326,7 +325,7 @@ void mostrarCreditos()
 {
     cout << "------------INTREGRANTES-------------" << endl;
     cout << "Ponce Alejandro - Legajo nro: 32583" << endl;
-    cout << "Troncoso Gabriela - Legano nro: 32662" << endl;
+    cout << "Troncoso Gabriela - Legajo nro: 32662" << endl;
     cout << "Robledo Pablo - Legajo nro: 27909" << endl;
     pausarPantalla();
 }
@@ -342,6 +341,7 @@ bool confirmarSalida()
         respuesta = toupper(respuesta);
     }
     while (respuesta != 'S' && respuesta != 'N');
+
 
     return (respuesta == 'S');
 }
