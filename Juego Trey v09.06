@@ -1,7 +1,12 @@
-<iostream>
+#include <iostream> //Incluye la biblioteca para la entrada/salida.
 #include <cstdlib>
 #include <ctime>
 #include <iomanip>
+#include <vector>
+#include <string> //Incluye la biblioteca para el manejo de cadenas.
+#include <map>
+#include <cctype> // Incluye la biblioteca con la función isdigit
+
 
 using namespace std;
 
@@ -15,28 +20,22 @@ bool confirmarSalida();
 // Roba una carta y asigna puntos de tiempo
 int robarCarta(int &pt);
 // Cuenta cuántas veces aparece un valor en el vector de dados
-int contarValor(int vDado[], int tam, int 
-valor
-);
+int contarValor(int vDado[], int tam, int valor);
 // Analiza la jugada y aplica bugs/fixes y puntos de ronda(hay que revisarlo bien)
-void analizarJugada(int vDado[], int tam, 
-int
- &pt, int &bugs, int &puntosRonda);
+void analizarJugada(int vDado[], int tam,int &pt, int &bugs, int &puntosRonda);
 // Limpia la pantalla (anda en Windows y Mac/Linux)
 void limpiarPantalla();
+//Pedir numero 2 o 3 para jugar
+int PedirNumeroValido();
 //Mostrar resultados finales
-void mostrarResultadoFinales (string 
-nombreJug
-[2], int puntosTotales[2],int pt[2], int 
-bugs
- [2], bool finalizado[2]);
+void mostrarResultadoFinales (string nombreJug[2], int puntosTotales[2],int pt[2], int bugs[2], bool finalizado[2]);
 // Pausa hasta que se presione ENTER
 void pausarPantalla();
 
 int main()
 {
     srand(time(NULL));
- // Pone la semilla aleatoria una sola vez
+// Pone la semilla aleatoria una sola vez
     int opcion;
     bool salir = false;
 
@@ -143,34 +142,9 @@ void jugar()
             }
 
             // Selección de dados
+
             int nDado;
             cout << "Con cuántos dados querés lanzar? (2 = 1PT / 3 = 2PT): ";
-            //agregar alguna validacion para que no se rompa
-            
-            cin >> nDado;
-            if (nDado.length()==1 && isdigit(nDado{0}))[nDado=nDado{0}]-'0'//se convierte de char a int 
-            if (nDado==2 || nDado ==3){
-                return numero;//numero valido
-            }else {cout <<"error solo se permite usar 2 o 3" <<endl};
-            {
-                /* code */
-            }
-            else
-            {
-                cout<<"numero invalido solo se permite 2 o 3";
-            }
-            
-            {
-                /* code */
-            }
-            
-
-            while ((nDado != 2 && nDado != 3) || (nDado == 2 && pt[turno] < 1) || (nDado == 3 && pt[turno] < 2))
-            {
-                cout << "Opcion invalida o sin PT suficiente. Elejí otra cantidad: ";
-                cin >> nDado;
-            }
-
             pt[turno] -= (nDado == 2 ? 1 : 2);
 
             // Tirada de dados
@@ -337,11 +311,11 @@ void mostrarResultadoFinales (string nombreJug[2], int puntosTotales[2],int pt[2
 // Muestra mensaje de estadísticas
 void mostrarEstadisticas()
 {
-string nombreJug[2];
-cout<<"TREY"<<endl;
-cout<<"-----------------------------------------------------------"<<endl;
-cout<<endl;
-cout<<"HITO                    "<<nombreJug[0]<<"  "<<nombreJug[1]<<"  "<<endl;
+    string nombreJug[2];
+    cout<<"TREY"<<endl;
+    cout<<"-----------------------------------------------------------"<<endl;
+    cout<<endl;
+    cout<<"HITO                    "<<nombreJug[0]<<"  "<<nombreJug[1]<<"  "<<endl;
 
     cout << "Estadisticas aun no implementadas." << endl;
     pausarPantalla();
@@ -401,4 +375,4 @@ void pausarPantalla()
 
 *Hitos (opcional)
 
-Ganador final/
+Ganador final*/
