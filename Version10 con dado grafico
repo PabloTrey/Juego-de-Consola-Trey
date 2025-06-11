@@ -119,7 +119,7 @@ void jugar()
 
         while (seguirJugando)
         {
-           // limpiarPantalla();
+            limpiarPantalla();
             // Muestra estado actual del jugador
             cout << "Turno de " << nombreJug[turno] << endl;
             cout << "Puntos acumulados: " << puntosTotales[turno] << " / Objetivo: " << objetivo[turno] << endl;
