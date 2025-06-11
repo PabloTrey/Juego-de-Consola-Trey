@@ -154,7 +154,7 @@ void jugar()
             for (int i = 0; i < nDado; i++)
             {
                 vDado[i] = rand() % 6 + 1;
-                cout << "Dado " << (i + 1) << ": " << vDado[i] << endl;//ingreso de dados aleatorios
+                //cout << "Dado " << (i + 1) << ": " << vDado[i] << endl;//ingreso de dados aleatorios
               /* cout << "ingresa el numero de dado " << (i + 1) << ": " << endl;//para test ingreso de dados manual
                 cin >> vDado[i];//para test*/
             }
