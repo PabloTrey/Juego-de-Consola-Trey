@@ -1,0 +1,474 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+
+using namespace std;
+void dibujarDados(int vDado[], int cantidad);
+void jugar();
+// Muestra estadísticas (todavia no esta hecho)
+void mostrarEstadisticas();
+// Muestra los créditos del grupo
+void mostrarCreditos();
+// Pregunta si realmente querés salir del juego
+bool confirmarSalida();
+// Roba una carta y asigna puntos de tiempo
+int robarCarta(int &pt);
+// Cuenta cuántas veces aparece un valor en el vector de dados
+int contarValor(int vDado[], int tam, int valor);
+// Analiza la jugada y aplica bugs/fixes y puntos de ronda(hay que revisarlo bien)
+void analizarJugada(int vDado[], int tam, int &pt, int &bugs, int &puntosRonda);
+// Limpia la pantalla (anda en Windows y Mac/Linux)
+void limpiarPantalla();
+// Mostrar resultados finales
+void mostrarResultadoFinales(string nombreJug[2], int puntosTotales[2], int pt[2], int bugs[2], bool finalizado[2]);
+// Pausa hasta que se presione ENTER
+void pausarPantalla();
+
+int main()
+{
+    srand(time(NULL)); // Pone la semilla aleatoria una sola vez
+    int opcion;
+    bool salir = false;
+
+    while (!salir)
+    {
+        limpiarPantalla();
+        cout << "=======================" << endl;
+        cout << "        TREY           " << endl;
+        cout << "=======================" << endl;
+        cout << "1 - JUGAR" << endl;
+        cout << "2 - ESTADISTICAS" << endl;
+        cout << "3 - CREDITOS" << endl;
+        cout << "0 - SALIR" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+
+        switch (opcion)
+        {
+        case 1:
+            jugar(); // Jugar una partida
+            break;
+        case 2:
+            mostrarEstadisticas(); // Mostrar estadísticas
+            break;
+        case 3:
+            mostrarCreditos(); // Mostrar créditos
+            break;
+        case 0:
+            salir = confirmarSalida(); // Preguntar si quiere salir
+            break;
+        default:
+            cout << "Opcion invalida. Intente nuevamente." << endl;
+            pausarPantalla();
+        }
+    }
+
+    return 0;
+}
+
+// === FUNCION PRINCIPAL DEL JUEGO ===
+void jugar()
+{
+    // Variables principales del juego
+    string nombreJug[2];
+    int pt[2] = {0, 0};
+    int bugs[2] = {0, 0};
+    int objetivo[2] = {0, 0};
+    int puntosTotales[2] = {0, 0};
+    int rondaActual = 1;
+
+    bool finalizado[2] = {false, false};
+
+    // Registro de nombres
+    cout << "Antes de comenzar deben registrar sus nombres:" << endl;
+    cout << "Jugador 1: ";
+    cin.ignore();               // limpia buffer para que funcione getline
+    getline(cin, nombreJug[0]); // para poder ingresar por ejemplo "Juan Pablo"
+    cout << endl
+         << "Jugador 2: ";
+    getline(cin, nombreJug[1]);
+    limpiarPantalla();
+
+    // Robar carta y definir objetivo inicial
+    for (int i = 0; i < 2; i++)
+    {
+        cout << nombreJug[i] << " elegí una carta para empezar: " << endl;
+        pausarPantalla();
+        objetivo[i] = robarCarta(pt[i]);
+        cout << "Recibe " << pt[i] << " PT" << endl
+             << endl;
+    }
+
+    pausarPantalla();
+    limpiarPantalla();
+
+    // Turnos de los jugadores
+    int turno = 0;
+    bool juegoTerminado = false;
+
+    while (!juegoTerminado)
+    {
+        int lanzamientoActual=0;
+        if (finalizado[turno])
+        {
+            turno = (turno + 1) % 2;
+            continue;
+        }
+
+        int puntosRonda = 0;
+        bool seguirJugando = true;
+
+        while (seguirJugando)
+        {
+           lanzamientoActual ++;
+           limpiarPantalla();
+            // Muestra estado actual del jugador
+            cout << "Turno de " << nombreJug[turno] << endl;
+            cout << "Puntos acumulados: " << puntosTotales[turno] << " / Objetivo: " << objetivo[turno] << endl;
+            cout << "Puntos de Tiempo: " << pt[turno] << " - BUGS: " << bugs[turno] << endl;
+            cout << "Ronda #: " << rondaActual << endl;
+            cout << "Lanzamiento #: "<<lanzamientoActual<<endl;
+            cout << endl;
+
+            // Si no tiene PT, termina su juego
+            if (pt[turno] < 1)
+            {
+                cout << nombreJug[turno] << " no tiene puntos de tiempo suficientes. Fin del juego para este jugador." << endl;
+                finalizado[turno] = true;
+                break;
+            }
+
+            // Selección de dados
+            int nDado;
+            if (pt[turno]<2)
+
+            cout << "Con cuántos dados querés lanzar? (2 = 1PT / 3 = 2PT): ";
+            cin >> nDado;
+
+            while ((nDado != 2 && nDado != 3) || (nDado == 2 && pt[turno] < 1) || (nDado == 3 && pt[turno] < 2))
+            {
+                cout << "Opcion invalida o sin PT suficiente. Elejí otra cantidad: ";
+                cin >> nDado;
+            }
+
+            pt[turno] -= (nDado == 2 ? 1 : 2);
+
+            // Tirada de dados
+            int vDado[3];
+            for (int i = 0; i < nDado; i++)
+            {
+                vDado[i] = rand() % 6 + 1;
+                //cout << "Dado " << (i + 1) << ": " << vDado[i] << endl;//ingreso de dados aleatorios
+              /* cout << "ingresa el numero de dado " << (i + 1) << ": " << endl;//para test ingreso de dados manual
+                cin >> vDado[i];//para test*/
+            }
+            dibujarDados(vDado, nDado);
+
+            int puntosAntes = puntosRonda;
+            analizarJugada(vDado, nDado, pt[turno], bugs[turno], puntosRonda); // Analiza resultado de los dados
+
+            if (puntosRonda == 0 && contarValor(vDado, nDado, 1) > 0)
+            {
+                // Si hubo bug, se termina la ronda
+                cout << "Puntos totales: " << puntosTotales[turno] << endl;
+                cout << "PT: " << pt[turno] << " - BUGS: " << bugs[turno] << endl;
+                pausarPantalla();
+                break;
+            }
+            else
+            {
+                cout << "Puntos de ronda acumulados: " << puntosRonda << endl;
+                cout << "PT: " << pt[turno] << " - BUGS: " << bugs[turno] << endl;
+
+                char decision;
+                do
+                {
+                    cout << "? Desea continuar lanzando? (S/N): ";
+                    cin >> decision;
+                    decision = toupper(decision);
+                } while (decision != 'S' && decision != 'N');
+
+              //puntosTotales[turno] += puntosRonda;
+
+                if (decision == 'N')
+                {
+                    puntosTotales[turno] += puntosRonda;
+                    seguirJugando = false;
+                }
+            }
+
+            // Verifica si alcanzó el objetivo
+            if (puntosTotales[turno] >= objetivo[turno])
+            {
+                cout << nombreJug[turno] << " Ganaste. fin del juego para este jugador." << endl;
+                finalizado[turno] = true;
+                seguirJugando = false;
+            }
+
+            pausarPantalla();
+        }
+
+        // Si ambos terminaron, fin del juego
+        if (finalizado[0] && finalizado[1])
+        {
+            juegoTerminado = true;
+        }
+        else if (rondaActual >= 10 && !(finalizado[0] || finalizado[1]))//modificar el numero de rondas para test
+        {
+            cout << "Se alcanzo la ronda 10 sin ganadores. FIn del juego por limite de rondas." << endl;
+            finalizado[0] = finalizado[1] = true;
+            juegoTerminado = true;
+        }
+        turno = (turno + 1) % 2;
+        if (turno == 0)
+            rondaActual++;
+    }
+
+    cout << "Fin del juego. ¡Gracias por jugar TREY!" << endl;
+    pausarPantalla();
+}
+
+// Roba carta y define puntos de tiempo iniciales
+int robarCarta(int &pt)
+{
+    int carta = rand() % (65 - 50 + 1) + 50;
+    cout << "Tu carta robada es: " << carta << endl;
+
+    if (carta <= 55)
+        pt = 7;
+    else if (carta <= 60)
+        pt = 8;
+    else
+        pt = 9;
+
+    return carta;
+}
+
+// Cuenta cuántas veces aparece cierto número en los dados
+int contarValor(int vDado[], int tam, int valor)
+{
+    int contador = 0;
+    for (int i = 0; i < tam; i++)
+    {
+        if (vDado[i] == valor)
+        {
+            contador++;
+        }
+    }
+    return contador;
+}
+
+// Analiza la jugada y actualiza bugs, PT y puntos de ronda
+void analizarJugada(int vDado[], int tam, int &pt, int &bugs, int &puntosRonda)
+{
+    int cantBugs = contarValor(vDado, tam, 1);
+    int cantFixes = contarValor(vDado, tam, 3);
+
+    if (cantBugs > 0)
+    {
+        puntosRonda = 0;
+
+        if (cantBugs == 1)
+            bugs += 1;
+        else if (cantBugs == 2)
+        {
+            bugs += 2;
+            pt -= 1;
+        }
+        else if (cantBugs == 3)
+        {
+            bugs += 3;
+            pt -= 2;
+        }
+
+        cout << "Aparecio al menos un BUG! Fin de la ronda." << endl;
+    }
+    else
+    {
+        for (int i = 0; i < tam; i++)
+        {
+            puntosRonda += vDado[i];
+        }
+    }
+
+    if (cantFixes > 0)
+    {
+        int eliminados = cantFixes;
+        if (eliminados > bugs)
+            eliminados = bugs;
+        bugs -= eliminados;
+
+        if (cantFixes == 2)
+            pt += 1; // chequear esto
+        else if (cantFixes == 3)
+            pt += 2;
+
+        cout << "FIXES: -" << eliminados << " BUGS";
+        if (cantFixes == 2)
+            cout << " +1 PT";
+        if (cantFixes == 3)
+            cout << " +2 PT";
+        cout << endl;
+    }
+}
+
+
+
+
+
+
+//------------------------------------------------------------------
+// MUESTRA POR PANTALLA MENU PRINCIPAL
+//------------------------------------------------------------------
+/*void menu ()
+{
+    system("cls");
+
+    cout<<"TREY"<<endl;
+
+    cout <<"-------------------------------------------------------------------------------------------------------------"<<endl;
+    cout <<endl;
+    cout <<nombreJug[0] ":"<< puntosTotales[turno]<< "                            "<<nombreJug[1] ":"<<puntosTotales[turno]<<endl  ;  // EN DESARROLLO
+    cout <<"PT: "<< pt[turno]<<"  "<< "BUGS: " bugs[turno<< "                     "<<"PT: "<< pt[turno]<<"  "<< "BUGS: " bugs[turno<<;// EN DESAROLLO
+
+    cout << "TURNO DE" << nombreJug[0]<<endl;
+    cout <<"+-----------------------------------------+"<<endl;
+    cout <<"|     RONDA # "<<rondaActual<<"           |"<<endl;
+    cout <<"|     PUNTOS DE LA RONDA:  "<<"           |"<<endl;
+    cout <<"|     LANZAMIENTOS:"<<lanzamientoActual<<"|"<<endl;
+    cout <<"+-----------------------------------------+"<<endl;
+
+    cout<<"LANZAMIENTO #"<<lanzamientoActual<< endl;
+
+    //SUMASTE 14 PUNTOS!
+    //SALIO 1 FIX. SE RESTA 1 A LOS BUGS
+    //CONTINUAR? (S/N)
+
+    cout<<"ELIJA OPCION: ";
+}
+*/
+// Mostrar resultados finales
+
+void mostrarResultadoFinales(string nombreJug[2], int puntosTotales[2], int pt[2], int bugs[2], bool finalizado[2])
+{
+    cout << "------------------RESULTADOS FINALES-------------------" << endl;
+    for (int i = 0; i < 2; i++)
+    {
+        cout << "Jugador: " << nombreJug[i] << endl;
+        cout << "Puntaje Total: " << puntosTotales[i] << endl;
+        cout << "Puntos de Tiempo restantes: " << pt[i] << endl;
+        cout << "Cantidad de BUGS: " << bugs[i] << endl;
+        cout << "Estado: " << (finalizado[i] ? "Finalizado" : "Abandono") << endl;
+        cout << "----------------------------------------------------" << endl;
+    }
+}
+// Muestra mensaje de estadísticas
+void mostrarEstadisticas()
+{
+    string nombreJug[2];
+    cout << "TREY" << endl;
+    cout << "-----------------------------------------------------------" << endl;
+    cout << endl;
+    cout << "HITO                    " << nombreJug[0] << "  " << nombreJug[1] << "  " << endl;
+
+    cout << "Estadisticas aun no implementadas." << endl;
+    pausarPantalla();
+}
+
+// Muestra los créditos de los integrantes
+void mostrarCreditos()
+{
+    cout << "------------INTREGRANTES-------------" << endl;
+    cout << "Ponce Alejandro - Legajo nro: 32583" << endl;
+    cout << "Troncoso Gabriela - Legajo nro: 32662" << endl;
+    cout << "Robledo Pablo - Legajo nro: 27909" << endl;
+    pausarPantalla();
+}
+
+// Confirma si el jugador realmente quiere salir
+bool confirmarSalida()
+{
+    char respuesta;
+    do
+    {
+        cout << "Seguro que desea salir? (S/N): ";
+        cin >> respuesta;
+        respuesta = toupper(respuesta);
+    } while (respuesta != 'S' && respuesta != 'N');
+
+    return (respuesta == 'S');
+}
+
+// Limpia la pantalla segun el sistema operativo
+void limpiarPantalla()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+// Pausa hasta que se presione ENTER
+void pausarPantalla()
+{
+    cout << "Presione ENTER para continuar...";
+    cin.ignore();
+    cin.get();
+}
+/*Faltaría:
+*Mostrar una pantalla de resultado final con:
+
+*Puntaje total
+
+*BUGS
+
+*PT restantes
+
+*Hitos (opcional)
+
+*Ganador final*/
+void dibujarDados(int vDado[], int cantidad) {
+   // string lineas[3];
+
+    for (int i = 0; i < cantidad; i++) {
+
+       cout << "+-------+" << endl;
+        switch (vDado[i])
+        {
+             case 1:
+            cout << "|       |" << endl;
+            cout << "|   *   |" << endl;
+            cout << "|       |" << endl;
+            break;
+        case 2:
+            cout << "| *     |" << endl;
+            cout << "|       |" << endl;
+            cout << "|     * |" << endl;
+            break;
+        case 3:
+            cout << "| *     |" << endl;
+            cout << "|   *   |" << endl;
+            cout << "|     * |" << endl;
+            break;
+        case 4:
+            cout << "| *   * |" << endl;
+            cout << "|       |" << endl;
+            cout << "| *   * |" << endl;
+            break;
+        case 5:
+            cout << "| *   * |" << endl;
+            cout << "|   *   |" << endl;
+            cout << "| *   * |" << endl;
+            break;
+        case 6:
+            cout << "| *   * |" << endl;
+            cout << "| *   * |" << endl;
+            cout << "| *   * |" << endl;
+            break;
+        }
+        cout << "+-------+" << endl;
+    }
+
+}
