@@ -2,38 +2,62 @@
 #include <cstdlib>
 #include <ctime>
 #include <iomanip>
-#include <string>
+#include <string> // para usar un vector que guarde juegos
+#include <vector>
 #include <cctype> //Para isdigit
 
 
 using namespace std;
+
+//DECLARACION DE VECTORES GLOBALES PARA GUARDAR LOS DATOS DEL RANKING
+const int MaxJugadores=100;
+string rankingNombres[MaxJugadores];
+int rankingPuntos [MaxJugadores];
+int totalJugadores=0;
+
 // DIBUJA LOS DADOS
 void dibujarDados(int vDado[], int cantidad);
 
+//FUNCION PRINCIPAL DEL JUEGO
 void jugar();
 
+// ORDENA EL RANKING DE JUGADORES CON MAYOR PUNTAJE
+void ordenarRanking(string nombreJug [], int puntosTotales[], int cantidad);
+
 // MUESTRA ESTADISTICAS (EN DESARROLLO)
-void mostrarEstadisticas();
+void mostrarEstadisticas(string nombreJug[5],int puntosTotales[5], int cantidad);
+
 // MUESTRA LOS CREDITOS DEL GRUPO
 void mostrarCreditos();
+
 // PREGUNTA SI REALMENTE QUIERE SALIR DEL JUEGO
 bool confirmarSalida();
+
 // ROBA UNA CARTA Y ASIGNA PUNTOS DE TIEMPO
 int robarCarta(int &pt);
+
 // CUENTA CUANTAS VECES APARECE UN VALOR EN EL VECTOR DE DADOS
 int contarValor(int vDado[], int tam, int valor);
+
 // ANALIZA LA JUGADA Y APLICA BUGS/FIXES Y PUNTOS DE RONDA (HAY QUE REVISARLO BIEN)
 void analizarJugada(int vDado[], int tam,int &pt, int &bugs, int &puntosRonda);
+
 // LIMPIA LA PANTALLA (ANDA EN WINDOWS Y MAC/LINUX)
 void limpiarPantalla();
+
 // PEDIR NUMERO 2 O 3 PARA JUGAR
 int PedirNumeroValido();
+
 // MOSTRAR RESULTADOS FINALES
 void mostrarResultadoFinales (string nombreJug[2], int puntosTotales[2],int pt[2], int bugs[2], bool finalizado[2]);
+
 // PAUSA HASTA QUE SE PRESIONE ENTER
 void pausarPantalla();
+
 // MUESTRA PANTALLA EN JUEGO Y ESTADISTICAS DE LOS JUGADORES
 void mostrarPanelRonda(string nombreJug[2], int puntosTotales[2], int pt[2], int bugs[2], int turno, int ronda, int puntosRonda, int lanzamientos);
+
+
 int main()
 {
     srand(time(NULL));
@@ -61,6 +85,7 @@ int main()
 
 
         cin >> opcion;
+        limpiarPantalla();
 
         switch (opcion)
         {
@@ -68,7 +93,9 @@ int main()
             jugar();                  // JUGAR UNA PARTIDA
             break;
         case 2:
-            mostrarEstadisticas();    // MOSTRAR ESTADISTICAS
+            ordenarRanking (rankingNombres, rankingPuntos, totalJugadores);
+            mostrarEstadisticas(rankingNombres,rankingPuntos,totalJugadores);   // MOSTRAR ESTADISTICAS
+            pausarPantalla();
             break;
         case 3:
             mostrarCreditos();        // MOSTRAR CREDITOS
@@ -110,10 +137,11 @@ void jugar()
     // ROBAR CARTA Y DEFINIR OBJETIVO INICIAL
     for (int i = 0; i < 2; i++)
     {
-        cout << nombreJug[i] << " elegí una carta para empezar: " << endl;
+        cout <<endl<<endl<<endl<<endl<<endl<<endl;
+        cout << "                                     "  <<nombreJug[i] <<" elegí una carta para empezar: " << endl;
         pausarPantalla();
         objetivo[i] = robarCarta(pt[i]);
-        cout << "Recibe " << pt[i] << " PT" << endl << endl;
+        cout << "                                                  Recibe " << pt[i] << " PT" << endl << endl;
     }
 
     pausarPantalla();
@@ -131,16 +159,17 @@ void jugar()
             continue;
         }
 
+        int lanzamientoActual=0;
         int puntosRonda = 0;
         bool seguirJugando = true;
 
-        int lanzamientos = 0;
+       // int lanzamientos = 0;
         while (seguirJugando)
         {
 
-            lanzamientos++; // Incrementa cada vez que se lanza
+            lanzamientoActual ++; // Incrementa cada vez que se lanza
             limpiarPantalla();
-            mostrarPanelRonda(nombreJug, puntosTotales, pt, bugs, turno, rondaActual, puntosRonda, lanzamientos);
+            mostrarPanelRonda(nombreJug, puntosTotales, pt, bugs, turno, rondaActual, puntosRonda, lanzamientoActual);
 
             // SI NO TIENE PT, TERMINA SU JUEGO
             if (pt[turno] < 1)
@@ -161,11 +190,11 @@ void jugar()
             }
             else
             {
-                cout << "Con cu├íntos dados quer├⌐s lanzar? (2 = 1PT / 3 = 2PT): ";
+                cout << "Con cuantos dados queres lanzar? (2 = 1PT / 3 = 2PT): ";
                 cin >> nDado;
                 while ((nDado != 2 && nDado != 3) || (nDado == 2 && pt[turno] < 1) || (nDado == 3 && pt[turno] < 2))
                 {
-                    cout << "Opcion invalida o sin PT suficiente. Elej├¡ otra cantidad: ";
+                    cout << "Opcion invalida o sin PT suficiente. Elegí otra cantidad: ";
                     cin >> nDado;
                 }
             }
@@ -180,7 +209,7 @@ void jugar()
                 cout << "Dado " << (i + 1) << ": " << vDado[i] << endl;
             }
             dibujarDados(vDado, nDado);
-            int puntosAntes = puntosRonda;
+            //int puntosAntes = puntosRonda;
             analizarJugada(vDado, nDado, pt[turno], bugs[turno], puntosRonda); // Analiza resultado de los dados
 
             if (puntosRonda == 0 && contarValor(vDado, nDado, 1) > 0)
@@ -199,7 +228,7 @@ void jugar()
                 char decision;
                 do
                 {
-                    cout << "? Desea continuar lanzando? (S/N): ";
+                    cout << "¿Desea continuar lanzando? (S/N): ";
                     cin >> decision;
                     decision = toupper(decision);
                 }
@@ -242,17 +271,40 @@ void jugar()
     }
 
     cout << "Fin del juego. ┬íGracias por jugar TREY!" << endl;
+
+    //GUARDAR RESULTADOS EN EL RANKING
+
+    for(int i=0; i<2; i++)
+    {
+        if(totalJugadores<MaxJugadores)
+        {
+            rankingNombres[totalJugadores]=nombreJug[i];
+            rankingPuntos[totalJugadores]=puntosTotales[i];
+            totalJugadores++;
+        }
+    }
+
     pausarPantalla();
+{
+
 }
+
+
 
 // ROBA CARTA Y DEFINE PUNTOS DE TIEMPO INICIALES
 int robarCarta(int &pt)
 {
     int carta = rand() % (65 - 50 + 1) + 50;
-    cout << "Tu carta robada es: " << carta << endl;
+    cout << "                                             Tu carta robada es: " << carta << endl;
 
-    if (carta <= 55) pt = 7;
-    else if (carta <= 60) pt = 8;
+    if (carta <= 55)
+    {
+    pt = 7;
+    }
+    else if (carta <= 60)
+    {
+    pt = 8;
+    }
     else pt = 9;
 
     return carta;
@@ -341,43 +393,58 @@ void mostrarPanelRonda(string nombreJug[2], int puntosTotales[2], int pt[2], int
     cout <<endl;
 }
 
-
-
-//MOSTRAR RESULTADOS FINALES
-
-void mostrarResultadoFinales (string nombreJug[2], int puntosTotales[2],int pt[2], int bugs [2], bool finalizado[2])
+// Muestra mensaje de estadísticas
+void ordenarRanking (string nombreJug[], int puntosTotales [],int cantidad)
 {
-    cout<< "------------------RESULTADOS FINALES-------------------"<<endl;
-    for (int i=0; i<2; i++)
+    int auxPuntosTotales;
+    string auxNombreJug;
+    for (int i=0; i<cantidad-1; i++)
     {
-        cout<<"Jugador: "<<nombreJug[i]<<endl;
-        cout<<"Puntaje Total: "<<puntosTotales[i]<<endl;
-        cout<<"Puntos de Tiempo restantes: "<<pt[i]<<endl;
-        cout<<"Cantidad de BUGS: "<<bugs[i]<<endl;
-        cout<<"Estado: "<<(finalizado[i]?"Finalizado": "Abandono")<<endl;
-        cout<<"----------------------------------------------------"<<endl;
+                                            //Intercambio de la variable auxiliar
+        for (int j=0; j<cantidad-1; j++)
+        {
+            if(puntosTotales[j]<puntosTotales[j+1])
+            {
+                auxPuntosTotales= puntosTotales [j];
+                puntosTotales[j]=puntosTotales [j+1];
+                puntosTotales [j+1]= auxPuntosTotales;
+                auxNombreJug= nombreJug[j];
+                nombreJug [j] =nombreJug [j+1];
+                nombreJug[j+1]=auxNombreJug;
+            }
+        }
     }
 }
-// MUESTRA MENSAJE DE ESTADISTICAS
-void mostrarEstadisticas()
-{
-    string nombreJug[2];
-    cout<<"TREY"<<endl;
-    cout<<"-----------------------------------------------------------"<<endl;
-    cout<<endl;
-    cout<<"HITO                    "<<nombreJug[0]<<"  "<<nombreJug[1]<<"  "<<endl;
 
-    cout << "Estadisticas aun no implementadas." << endl;
-    pausarPantalla();
+
+void mostrarEstadisticas(string nombreJug [5], int puntosTotales [5], int cantidad)
+{
+    int cantidadJugAMostrar=5;
+    //Si hay menos de 5 jugadores que muestre los que haya
+    if (cantidad <5)
+    {
+        cantidadJugAMostrar=cantidad;
+    }
+
+    cout<< "----Top "<<cantidadJugAMostrar<<" jugadores----" <<endl;
+
+    for (int i=0; i<cantidadJugAMostrar; i++)
+    {
+        cout<< (i+1)<<". "<<nombreJug [i]<<" :"<<puntosTotales [i]<<" puntos totales"<<endl;
+
+    }
+    cout << "Jugador con mas puntos: "<<nombreJug [0]<<" ( "<<puntosTotales [0]<<" puntos)."<<endl;
+
 }
 
 // MUESTRA LOS CREDITOS DE LOS INTEGRANTES
 void mostrarCreditos()
 {
-    cout << "------------INTREGRANTES-------------" << endl;
-    cout << "Ponce Alejandro - Legajo nro: 32583" << endl;
-    cout << "Troncoso Gabriela - Legajo nro: 32662" << endl;
-    cout << "Robledo Pablo - Legajo nro: 27909" << endl;
+    cout << "                                       ------------INTEGRANTES-------------" << endl;
+    cout << "                                       Ponce Alejandro - Legajo nro: 32583" << endl;
+    cout << "                                       Troncoso Gabriela - Legajo nro: 32662" << endl;
+    cout << "                                       Robledo Pablo - Legajo nro: 27909" << endl;
+    cout <<endl;
     pausarPantalla();
 }
 
@@ -410,7 +477,7 @@ void limpiarPantalla()
 // PAUSA HASTA QUE SE PRESIONE ENTER
 void pausarPantalla()
 {
-    cout << "Presione ENTER para continuar...";
+    cout << "                                       Presione ENTER para continuar...";
     cin.ignore();
     cin.get();
 }
@@ -418,7 +485,7 @@ void pausarPantalla()
 //MUESTRA LOS DADOS DIBUJADOS
 void dibujarDados(int vDado[], int cantidad)
 {
-    // string lineas[3];
+
 
     for (int i = 0; i < cantidad; i++)
     {
@@ -461,3 +528,45 @@ void dibujarDados(int vDado[], int cantidad)
     }
 
 }
+
+//MOSTRAR RESULTADOS FINALES
+
+void mostrarResultadoFinales (string nombreJug[], int puntosTotales[], int pt[],int bugs[])
+{
+    cout<< "-------RESULTADOS FINALES-------"<<endl;
+
+    for (int i=0; i<2; i++)
+    {
+        cout<<nombreJug[i]<<":"<<endl;
+        cout<<"Puntos totales: "<<puntosTotales[i]<<endl;
+        cout<< "BUGS: "<<bugs[i]<<endl;
+        cout<<"Puntos restantes: "<<pt[i]<<endl;
+        cout<<"----------------------------------"<<endl;
+    }
+
+    if (puntosTotales[0]>puntosTotales[1])
+        cout<< "Ganador: "<<nombreJug[0]<<"!"<<endl;
+    else if (puntosTotales[1]>puntosTotales[0])
+        cout<<"Ganador: "<<nombreJug[1]<<"!"<<endl;
+    else
+        cout<<"¡Empate!"<<endl;
+}
+
+// Para guardar juegos- pendiente
+void guardarJuego(string jugador, int puntaje, int rondasGanadas, int empates, int rondasTotales, int puntuacionFinal)
+{
+
+}
+/*Faltar├¡a:
+*Mostrar una pantalla de resultado final con:
+
+*Puntaje total
+
+*BUGS
+
+*PT restantes
+
+*Hitos (opcional)
+
+Ganador final*/
+
