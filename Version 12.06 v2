@@ -151,6 +151,7 @@ int lanzamientoActual=0;
         {
             lanzamientoActual ++;// Incrementa cada vez que se lanza
             limpiarPantalla();
+            mostrarPanelRonda(nombreJug, puntosTotales, pt, bugs, turno, rondaActual, puntosRonda, lanzamientos);
             // Muestra estado actual del jugador
             cout << "Turno de " << nombreJug[turno] << endl;
             cout << "Puntos acumulados: " << puntosTotales[turno] << " / Objetivo: " << objetivo[turno] << endl;
